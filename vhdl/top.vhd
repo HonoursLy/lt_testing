@@ -6,20 +6,23 @@ entity top is
 		tram_wr_en : in std_logic;
 		reset : in std_logic;
 		clk_48 : out std_logic;
-		clk_
-		dout : out std_logic
+		clk_tx : out std_logic;
+		dout : out std_logic;
+		enc_ena : out std_logic
 	);
 end top;
 
 architecture rtl of top is
 	component tx_tb is
-		wr_clk : in STD_LOGIC;
-		reset : in STD_LOGIC;
-		wr_en : in STD_LOGIC;
-		tx_length : in std_logic_vector (10 downto 0);
-		wr_ram : out STD_LOGIC_VECTOR (9 downto 0);
-		wr_addr : out STD_LOGIC_VECTOR (10 downto 0);
-		tx_ready : out STD_LOGIC
+		port (
+			wr_clk : in STD_LOGIC;
+			reset : in STD_LOGIC;
+			wr_en : in STD_LOGIC;
+			tx_length : in std_logic_vector (10 downto 0);
+			wr_ram : out STD_LOGIC_VECTOR (9 downto 0);
+			wr_addr : out STD_LOGIC_VECTOR (10 downto 0);
+			tx_ready : out STD_LOGIC
+		);
 	end component;
 
 	component ram is
@@ -40,20 +43,17 @@ architecture rtl of top is
 
 	component TX_RAM IS
 	PORT (
-		-- enter port declarations here
-		wr_clk : IN STD_LOGIC;
 		rd_clk : IN STD_LOGIC;
 		reset : IN STD_LOGIC;
-		wr_en : IN STD_LOGIC;
 		rd_en : IN STD_LOGIC;
 		tx_length : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
-		wr_addr : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-		rd_addr : OUT STD_LOGIC_VECTOR (10 DOWNTO 0)
-	);
+		rd_addr : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
+		enc_en : OUT STD_LOGIC -- signal to stop the encoder from writing to dout
+		);
 	END component;
 	component manchester_encoder is
 	generic(
-		BITS : INTEGER := 10 -- Number of bits being encoded
+		BITS : INTEGER := 10; -- Number of bits being encoded
 		mlength : INTEGER := 11 -- Number of bits in the length message (not including the sync)
 	);
 	port (
@@ -81,7 +81,7 @@ architecture rtl of top is
 	COMPONENT clk_divider IS
 		GENERIC (
 			Freq_in : INTEGER := 48000000;
-			N : INTEGER := 10; -- speed divider, equates to the number of bits (BITS)
+			N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
 		); 
 		PORT (
 			clk_in : IN STD_LOGIC;
@@ -97,35 +97,40 @@ architecture rtl of top is
         rst : IN STD_LOGIC;
 		-- Indicators from other blocks to trigger states
         tx_ready : IN STD_LOGIC; -- indication from EC to start reading TX_RAM and transmit
-		rx_received : IN STD_LOGIC; -- indication from the RX line that a light message is incoming
-		host_align : IN STD_LOGIC;
-		device_align : IN STD_LOGIC;
-		-- Add error signals that suggest to go to idle state?
-		rx_error : OUT STD_LOGIC;
-		tx_error : OUT STD_LOGIC;
-		host : IN STD_LOGIC;
+		-- rx_received : IN STD_LOGIC; -- indication from the RX line that a light message is incoming
+		-- host_align : IN STD_LOGIC;
+		-- device_align : IN STD_LOGIC;
+		-- -- Add error signals that suggest to go to idle state?
+		-- rx_error : OUT STD_LOGIC;
+		-- tx_error : OUT STD_LOGIC;
+		-- host : IN STD_LOGIC;
         ena_t : out std_logic;
         length_sent : in std_logic;
         tram_rd_en : out STD_LOGIC;
         enc_en : in std_logic
+		-- rx_done : in std_logic;
+		-- aligned : in std_logic
     );
 	END component;
 
 	signal tx_ready, tram_rd_en : std_logic := '0';
 	signal tram_in, tram_out : std_logic_vector (9 downto 0);
 	signal tx_clk : std_logic;
-	signal tram_raddr_i,tram_waddr_i : std_logic_vector (9 downto 0);
-	signal tx_length : std_logic_vector (9 downto 0) := "0000111111";
+	signal tram_raddr_i,tram_waddr_i : std_logic_vector (10 downto 0);
+	signal tx_length : std_logic_vector (10 downto 0) := "00001111111";
 	signal enc_clk : std_logic;
 	signal length_sent : std_logic;
 	signal ena_t : std_logic;
-	signal rx_received : std_logic := '0'; -- indication from the RX line that a light message is incoming
-	signal host_align : std_logic := '0';
-	signal device_align : std_logic := '0';
-		-- Add error signals that suggest to go to idle state?
-	signal rx_error : std_logic := '0';
-	signal tx_error : std_logic := '0';
-	signal host : std_logic := '0';
+	-- signal rx_received : std_logic := '0'; -- indication from the RX line that a light message is incoming
+	-- signal host_align : std_logic := '0';
+	-- signal device_align : std_logic := '0';
+	-- 	-- Add error signals that suggest to go to idle state?
+	-- signal rx_error : std_logic := '0';
+	-- signal tx_error : std_logic := '0';
+	-- signal host : std_logic := '0';
+	signal enc_en :std_logic := '0';
+	-- signal rx_done : std_logic := '0';
+	-- signal aligned : std_logic := '0';
 
 
 begin
@@ -145,7 +150,7 @@ ram_tx : ram
     generic map (
         addr_width => 11, -- 2048 x 10
         data_width => 10
-    ),
+    )
     port map (
         write_en => tram_wr_en,
         waddr  => tram_waddr_i,
@@ -166,13 +171,12 @@ tx_addr : TX_RAM
 		enc_en => enc_en
 	);
 
-END ENTITY TX_RAM;
 
 man_enc : manchester_encoder
 	generic map(
 		BITS => 10, -- Number of bits being encoded in message 'byte'
 		mlength => 11 -- Number of bits in the length message (not including the sync)
-	);
+	)
 	port map (
 		clk => enc_clk,
 		message => tram_out,
@@ -182,7 +186,6 @@ man_enc : manchester_encoder
 		reset => reset,
 		ena_t => ena_t 
 	);
-end entity manchester_encoder;
 
 u_osc : SB_HFOSC
 	GENERIC MAP(
@@ -194,13 +197,13 @@ u_osc : SB_HFOSC
 		CLKHF => enc_clk
 	);
 
-clk_tx : clk_divider IS
+clk_4_tx : clk_divider
     GENERIC map (
-        Freq_in => 48000000
+        Freq_in => 48000000,
         N => 10 -- speed divider, equates to the number of bits (BITS)
     )
     PORT map (
-        clk_in => enc_clk
+        clk_in => enc_clk,
         reset => reset,
         clk_out => tx_clk
     );
@@ -211,19 +214,24 @@ lt_fsm : LT_controller
         rst => reset,
 		-- Indicators from other blocks to trigger states
         tx_ready => tx_ready, -- indication from EC to start reading TX_RAM and transmit
-		rx_received => rx_received -- indication from the RX line that a light message is incoming
-		host_align => host_align,
-		device_align => device_align,
-		-- Add error signals that suggest to go to idle state?
-		rx_error => rx_error,
-		tx_error => tx_error,
-		host => host,
+		-- rx_received => rx_received, -- indication from the RX line that a light message is incoming
+		-- host_align => host_align,
+		-- device_align => device_align,
+		-- -- Add error signals that suggest to go to idle state?
+		-- rx_error => rx_error,
+		-- tx_error => tx_error,
+		-- host => host,
         ena_t => ena_t,
         length_sent => length_sent,
         tram_rd_en => tram_rd_en,
         enc_en => enc_en
+		-- rx_done => rx_done,
+		-- aligned => aligned
     );
 
+	clk_48 <= enc_clk;
+	clk_tx <= tx_clk;
+	enc_ena <= ena_t;
 -- tx_clk => clock A
 -- enc_clk => BITS * clock A
 -- dec_clk => enc_clk * samples per bit

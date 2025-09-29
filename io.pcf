@@ -1,5 +1,6 @@
-set_io a_i 18
-set_io b_i 19
-set_io c_i 20
-
-set_io d_o 39
+set_io tram_wr_en 10
+set_io reset 20
+set_io clk_48 28 
+set_io clk_tx 25
+set_io dout 11
+set_io enc_ena 12

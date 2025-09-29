@@ -9,6 +9,12 @@ read_verilog \
 
 ghdl --std=08 -fsynopsys -frelaxed-rules \
 	vhdl/top.vhd \
+	vhdl/clk_divide.vhd \
+	vhdl/EC_TX.vhd \
+	vhdl/LT_controller.vhd \
+	vhdl/manchester_encoder.vhd\
+	vhdl/ram.vhd \
+	vhdl/TX_RAM.vhd \
 	-e top;
 
 # synthesize yosys IR into ice40 primatives

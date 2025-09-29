@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 
 entity manchester_encoder is
 	generic(
-		BITS : INTEGER := 10 -- Number of bits being encoded
+		BITS : INTEGER := 10; -- Number of bits being encoded
 		mlength : INTEGER := 11 -- Number of bits in the length message (not including the sync)
 	);
 	port (
@@ -34,7 +34,7 @@ begin
 			lencount := mlength-1;
 			length_sent <= '0';
 
-		elsif (ena_t = '1)'then
+		elsif (ena_t = '1') then
 			dout <= internal xor clk;
 			if (length_sent = '0') then
 				if (clk'event and clk = '1') then

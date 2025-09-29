@@ -5,7 +5,7 @@ USE IEEE.numeric_std.all;
 ENTITY clk_divider IS
     GENERIC (
         Freq_in : INTEGER := 48000000;
-        N : INTEGER := 10; -- speed divider, equates to the number of bits (BITS)
+        N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
     ); 
     PORT (
         clk_in : IN STD_LOGIC;
@@ -18,6 +18,7 @@ END clk_divider;
 ARCHITECTURE Behav OF clk_divider IS
     SIGNAL temp : STD_LOGIC;
     SIGNAL counter : INTEGER;
+    SIGNAL divider : INTEGER := 2*N;
 
 BEGIN
     frequency_divider : PROCESS (reset, clk_in)
@@ -26,7 +27,7 @@ BEGIN
             temp <= '0';
             counter <= 0;
         ELSIF rising_edge(clk_in) THEN
-            IF (counter = Freq_in/N) THEN
+            IF (counter = Freq_in/divider) THEN
                 temp <= NOT(temp);
                 counter <= 0;
             ELSE
