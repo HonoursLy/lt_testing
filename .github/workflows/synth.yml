@@ -1,0 +1,41 @@
+name: synthesize
+
+on:
+  push:
+    paths: ["**/*.vhd", "**/*.vhdl", "**/*.v", "scripts/**", ".github/workflows/*synth.yml"]
+  pull_request:
+
+jobs:
+  synth:
+    runs-on: ubuntu-latest
+
+    container:
+      image: hdlc/ghdl:yosys
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install ice40 deps
+        run: apt update && apt install nextpnr-ice40 iverilog gtkwave fpga-icestorm -y
+
+      - name: build for ice40up5k 
+        run: |
+          yosys -V
+          yosys -s scripts/ice40up5k_synth.ys
+
+      - name: get current date
+        id: date
+        run: |
+          echo "now=$(date +'%y%m%d_%H%M%S')" >> $GITHUB_OUTPUT
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: synth_artifacts_${{ steps.date.outputs.now }}
+          path: |
+            build/*
+            *.json
+            *.asc
+            *.bin
+

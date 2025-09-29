@@ -1,0 +1,30 @@
+# Must have this so you can import ghdl else vhdl wont work
+plugin -i /usr/local/share/yosys/plugins/ghdl.so
+
+# start synthesis into yosys intermediate representation
+# in this case, ghdl holds the top entity. Adjust as required
+read_verilog \
+	verilog/and2.v \
+	verilog/or2.v \
+
+ghdl --std=08 -fsynopsys -frelaxed-rules \
+	vhdl/top.vhd \
+	-e top;
+
+# synthesize yosys IR into ice40 primatives
+synth_ice40 -top top
+
+# there's some funniness with the way ghdl-yosys-plugin works
+# this is to apologise for it
+delete t:$scopeinfo
+clean -purge
+
+# do the place and route
+write_json top.json
+!nextpnr-ice40 --up5k --package sg48 --json top.json --pcf io.pcf --asc top.asc
+
+# Generate the bitstream
+!icepack top.asc ice40up5k_top.bin
+
+proc; opt; 
+stat;
