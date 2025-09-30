@@ -34,34 +34,36 @@ begin
 			lencount := mlength-1;
 			length_sent <= '0';
 
-		elsif (ena_t = '1') then
-			dout <= internal xor clk;
-			if (clk'event and clk = '1') then
-				if (length_sent = '0') then
-					if (lencount = 2) then
-						internal <= tx_length(lencount);
-						length_sent <= '1';
-					elsif (lencount = 1) then
-						parallel <= message; -- load the message so the system is ready to send the message straight away
-						internal <= tx_length(lencount);
-						count := BITS;
-					elsif (lencount = 0) then
-						internal <= tx_length(lencount);
-						lencount := mlength;
-					else
-						internal <= tx_length(lencount);
-					end if;
-					lencount := lencount - 1;
-				else -- once the length is sent, start sending the message
-					count := count - 1;
-					if (count = 0) then
-						internal <= parallel(count);
-						parallel <= message;
-						count := BITS;
-					else
-						internal <= parallel(count);
-					end if;
+		elsif (clk'event) then
+			if (ena_t = '1') then
+				dout <= internal xor clk;
+				if (clk = '1') then
+					if (length_sent = '0') then
+						if (lencount = 2) then
+							internal <= tx_length(lencount);
+							length_sent <= '1';
+						elsif (lencount = 1) then
+							parallel <= message; -- load the message so the system is ready to send the message straight away
+							internal <= tx_length(lencount);
+							count := BITS;
+						elsif (lencount = 0) then
+							internal <= tx_length(lencount);
+							lencount := mlength;
+						else
+							internal <= tx_length(lencount);
+						end if;
+						lencount := lencount - 1;
+					else -- once the length is sent, start sending the message
+						count := count - 1;
+						if (count = 0) then
+							internal <= parallel(count);
+							parallel <= message;
+							count := BITS;
+						else
+							internal <= parallel(count);
+						end if;
 
+					end if;
 				end if;
 			end if;
 		else
