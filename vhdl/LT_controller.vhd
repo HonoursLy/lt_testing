@@ -84,38 +84,38 @@ BEGIN
             WHEN TX =>
                 case TXPS is
                     WHEN 0 =>
-                        ena_t <= '1';
+                        ena_t_s <= '1';
                         NTXPS <= 1;
-                        tram_rd_en <= '0';
+                        tram_rd_en_s <= '0';
                         ns <= TX;
                     WHEN 1 =>
                         if (length_sent = '1') then
-                            tram_rd_en <= '1';
+                            tram_rd_en_s <= '1';
                             NTXPS <= 2;
-                            ena_t <= '1';
+                            ena_t_s <= '1';
                             ns <= TX;
                         else
                             ns <= TX;
-                            tram_rd_en <= '0';
+                            tram_rd_en_s <= '0';
                             NTXPS <= 1;
-                            ena_t <= '1';
+                            ena_t_s <= '1';
                         end if;
                     WHEN 2 =>
                         if (enc_en = '0') then
-                            ena_t <= '0';
-                            tram_rd_en <= '0';
+                            ena_t_s <= '0';
+                            tram_rd_en_s <= '0';
                             ns <= ID;
                             NTXPS <= 0;
                         else
                             ns <= TX;
-                            ena_t <= '1';
-                            tram_rd_en <= '1';
+                            ena_t_s <= '1';
+                            tram_rd_en_s <= '1';
                             NTXPS <= 2;
                         end if;
                     WHEN others =>
                             NTXPS <= 0;
-                            ena_t <= '0';
-                            tram_rd_en <= '0';
+                            ena_t_s <= '0';
+                            tram_rd_en_s <= '0';
                             ns <= ID;
                 end case;
 
