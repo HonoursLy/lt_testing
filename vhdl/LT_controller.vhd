@@ -58,7 +58,8 @@ BEGIN
 
     comb_proc : PROCESS (ps, TXPS, tx_ready, length_sent, enc_en)
     BEGIN
-
+        ena_t_s <= '0';
+        tram_rd_en_s <= '0';
         CASE ps IS
 
             WHEN RT =>
