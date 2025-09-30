@@ -32,30 +32,33 @@ ARCHITECTURE rtl OF LT_controller IS
     SIGNAL TXPS : INTEGER := 0;
     SIGNAL NTXPS : INTEGER := 0;
 
-    SIGNAL rate : INTEGER := 50000000;
-    SIGNAL clk : STD_LOGIC;
+    SIGNAL ena_t_s : STD_LOGIC := '0';
+    SIGNAL tram_rd_en_s : STD_LOGIC := '0';
 	-- SIGNAL RE_count : INTEGER := 0;
 	-- SIGNAL TE_count : INTEGER := 0;
 	-- count number of error signals
 
 
 BEGIN
+    ena_t <= ena_t_s;
+    tram_rd_en <= tram_rd_en_s;
 
-    sync_proc : PROCESS (clk, rst)
+    sync_proc : PROCESS (fsm_clk, rst)
     BEGIN
         IF rst = '0' THEN
             ps <= RT;
             TXPS <= 0;
             -- RE_count <= 0;
             -- TE_count <= 0;
-        ELSIF rising_edge(clk) THEN
+        ELSIF rising_edge(fsm_clk) THEN
             ps <= ns;
             TXPS <= NTXPS;
         END IF;
     END PROCESS sync_proc;
 
-    comb_proc : PROCESS (ps, tx_ready, enc_en, length_sent)
+    comb_proc : PROCESS (ps, TXPS, tx_ready, length_sent, enc_en)
     BEGIN
+
         CASE ps IS
 
             WHEN RT =>
