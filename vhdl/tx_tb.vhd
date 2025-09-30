@@ -36,13 +36,13 @@ PROCESS (wr_clk, reset)
 					w_count <= w_count + 1;
 				END IF;
 			else 
-				r_count <= (OTHERS => '0');
+				w_count <= (OTHERS => '0');
 				tx_ready <= '0';
 			END IF;
 		END IF;
 	END PROCESS;
 
-wr_ram <= wr_count (9 downto 0);
+wr_ram <= wr_count(9 downto 0);
 wr_addr <= wr_count;
 
 end architecture arch;
