@@ -34,8 +34,8 @@ ARCHITECTURE rtl OF LT_controller IS
 
     SIGNAL rate : INTEGER := 50000000;
     SIGNAL clk : STD_LOGIC;
-	SIGNAL RE_count : INTEGER := 0;
-	SIGNAL TE_count : INTEGER := 0;
+	-- SIGNAL RE_count : INTEGER := 0;
+	-- SIGNAL TE_count : INTEGER := 0;
 	-- count number of error signals
 
 
@@ -46,8 +46,8 @@ BEGIN
         IF rst = '0' THEN
             ps <= RT;
             TXPS <= 0;
-            RE_count <= 0;
-            TE_count <= 0;
+            -- RE_count <= 0;
+            -- TE_count <= 0;
         ELSIF rising_edge(clk) THEN
             ps <= ns;
             TXPS <= NTXPS;
@@ -62,18 +62,20 @@ BEGIN
 				-- Reset all light variables
 				-- Go to idle state
 				ns <= ID;
+                NTXPS <= 0;
                 
             WHEN ID =>
 				-- idle timer if in run state? usb should be running frequently enough that the system should not be in idle long? => tx_error/ hard fault
                 IF (tx_ready = '1') THEN
                     ns <= TX;
-                    TXPS <= 0;
+                    NTXPS <= 0;
 					-- transition variable changes
 				-- elsif (rx_received = '1') then
 				-- 	ns <= RX;
 				-- 	-- transition variable changes
                 ELSE
                     ns <= ID;
+                    NTXPS <= 0;
                 END IF;
             WHEN TX =>
                 case TXPS is
@@ -90,6 +92,9 @@ BEGIN
                             ns <= TX;
                         else
                             ns <= TX;
+                            tram_rd_en <= '0';
+                            NTXPS <= 1;
+                            ena_t <= '1';
                         end if;
                     WHEN 2 =>
                         if (enc_en = '0') then
@@ -99,12 +104,15 @@ BEGIN
                             NTXPS <= 0;
                         else
                             ns <= TX;
+                            ena_t <= '1';
+                            tram_rd_en <= '1';
+                            NTXPS <= 2;
                         end if;
                     WHEN others =>
                             NTXPS <= 0;
                             ena_t <= '0';
                             tram_rd_en <= '0';
-                            ns <= TX;
+                            ns <= ID;
                 end case;
 
 			-- WHEN RX =>
@@ -171,6 +179,7 @@ BEGIN
 
             WHEN OTHERS =>
                 ns <= RT;
+                NTXPS <= 0;
 
 
         END CASE;
