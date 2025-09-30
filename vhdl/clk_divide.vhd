@@ -11,16 +11,14 @@ ENTITY clk_divider IS
         clk_in : IN STD_LOGIC;
         reset : IN STD_LOGIC;
         clk_out : OUT STD_LOGIC
-
     );
 END clk_divider;
 
-ARCHITECTURE Behav OF clk_divider IS
+ARCHITECTURE Behave OF clk_divider IS
     SIGNAL temp : STD_LOGIC;
     SIGNAL counter : INTEGER;
 
-BEGIN
-    divider 
+BEGIN 
     frequency_divider : PROCESS (reset, clk_in)
     BEGIN
         IF (reset = '0') THEN
@@ -36,4 +34,4 @@ BEGIN
         END IF;
     END PROCESS;
     clk_out <= temp;
-END Behav;
+END Behave;
