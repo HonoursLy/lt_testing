@@ -27,15 +27,15 @@ begin
 		variable count : INTEGER range 0 to BITS;
 		variable lencount : INTEGER range 0 to mlength;
 	begin
-		if (reset = '0') then
-			internal <= '0';
-			parallel <= (others => '0');
-			count := BITS;
-			lencount := mlength-1;
-			length_sent_w <= '0';
+		if (clk'event and clk= '1') then
+			if (reset = '0') then
+				internal <= '0';
+				parallel <= (others => '0');
+				count := BITS;
+				lencount := mlength-1;
+				length_sent_w <= '0';
 
-		elsif (clk'event and clk= '1') then
-			if (ena_t = '1') then
+			elsif (ena_t = '1') then
 				if (length_sent_w = '0') then
 					if (lencount = 2) then
 						internal <= tx_length(lencount);
@@ -61,14 +61,13 @@ begin
 						internal <= parallel(count);
 					end if;
 				end if;
-
+			else
+				lencount := mlength-1;
+				count := BITS;
+				dout <= '0';
+				length_sent <= '0';
+				internal <= '0';
 			end if;
-		else
-			lencount := mlength-1;
-			count := BITS;
-			dout <= '0';
-			length_sent <= '0';
-			internal <= '0';
 		end if;
 	end process;
 
