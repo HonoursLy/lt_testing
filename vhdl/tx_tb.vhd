@@ -6,6 +6,7 @@ use IEEE.std_logic_unsigned.all;
 
 
 entity tx_tb is
+	port(
 	wr_clk : in STD_LOGIC;
 	reset : in STD_LOGIC;
 	wr_en : in STD_LOGIC;
@@ -13,6 +14,7 @@ entity tx_tb is
 	wr_ram : out STD_LOGIC_VECTOR (9 downto 0);
 	wr_addr : out STD_LOGIC_VECTOR (10 downto 0);
 	tx_ready : out STD_LOGIC
+	);
 end entity tx_tb;
 
 architecture arch of tx_tb is
