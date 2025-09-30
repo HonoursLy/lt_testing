@@ -64,8 +64,7 @@ begin
 			else
 				lencount := mlength-1;
 				count := BITS;
-				dout <= '0';
-				length_sent <= '0';
+				length_sent_w <= '0';
 				internal <= '0';
 			end if;
 		end if;
