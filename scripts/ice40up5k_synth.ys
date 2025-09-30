@@ -16,7 +16,6 @@ ghdl --std=08 -fsynopsys -frelaxed-rules \
 	vhdl/ram.vhd \
 	vhdl/TX_RAM.vhd \
 	vhdl/tx_tb.vhd \
-	
 	-e top;
 
 # synthesize yosys IR into ice40 primatives
