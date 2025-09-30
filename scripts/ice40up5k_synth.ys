@@ -10,7 +10,6 @@ plugin -i /usr/local/share/yosys/plugins/ghdl.so
 ghdl --std=08 -fsynopsys -frelaxed-rules \
 	vhdl/top.vhd \
 	vhdl/clk_divide.vhd \
-	vhdl/EC_TX.vhd \
 	vhdl/LT_controller.vhd \
 	vhdl/manchester_encoder.vhd\
 	vhdl/ram.vhd \
