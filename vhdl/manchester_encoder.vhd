@@ -36,8 +36,8 @@ begin
 
 		elsif (ena_t = '1') then
 			dout <= internal xor clk;
-			if (length_sent = '0') then
-				if (clk'event and clk = '1') then
+			if (clk'event and clk = '1') then
+				if (length_sent = '0') then
 					if (lencount = 2) then
 						internal <= tx_length(lencount);
 						length_sent <= '1';
@@ -52,9 +52,7 @@ begin
 						internal <= tx_length(lencount);
 					end if;
 					lencount := lencount - 1;
-				end if;
-			else -- once the length is sent, start sending the message
-				if (clk'event and clk = '1') then
+				else -- once the length is sent, start sending the message
 					count := count - 1;
 					if (count = 0) then
 						internal <= parallel(count);
