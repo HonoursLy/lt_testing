@@ -3,9 +3,9 @@ plugin -i /usr/local/share/yosys/plugins/ghdl.so
 
 # start synthesis into yosys intermediate representation
 # in this case, ghdl holds the top entity. Adjust as required
-read_verilog \
-	verilog/and2.v \
-	verilog/or2.v \
+#read_verilog \
+	#verilog/and2.v \
+	#verilog/or2.v \
 
 ghdl --std=08 -fsynopsys -frelaxed-rules \
 	vhdl/top.vhd \
