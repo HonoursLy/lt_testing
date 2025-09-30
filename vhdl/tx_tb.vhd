@@ -42,7 +42,7 @@ PROCESS (wr_clk, reset)
 		END IF;
 	END PROCESS;
 
-wr_ram <= wr_count(9 downto 0);
-wr_addr <= wr_count;
+wr_ram <= w_count(9 downto 0);
+wr_addr <= w_count;
 
 end architecture arch;
