@@ -21,50 +21,47 @@ end entity manchester_encoder;
 architecture arch of manchester_encoder is
 	signal internal : STD_LOGIC := '0';
 	signal parallel : STD_LOGIC_VECTOR(BITS-1 downto 0) := (others => '0');
+	signal length_sent_w : STD_LOGIC;
 begin
 	process (clk, internal) is
 		variable count : INTEGER range 0 to BITS;
 		variable lencount : INTEGER range 0 to mlength;
 	begin
 		if (reset = '0') then
-			dout <= '0';
 			internal <= '0';
 			parallel <= (others => '0');
 			count := BITS;
 			lencount := mlength-1;
-			length_sent <= '0';
+			length_sent_w <= '0';
 
-		elsif (clk'event) then
+		elsif (clk'event and clk= '1') then
 			if (ena_t = '1') then
-				dout <= internal xor clk;
-				if (clk = '1') then
-					if (length_sent = '0') then
-						if (lencount = 2) then
-							internal <= tx_length(lencount);
-							length_sent <= '1';
-						elsif (lencount = 1) then
-							parallel <= message; -- load the message so the system is ready to send the message straight away
-							internal <= tx_length(lencount);
-							count := BITS;
-						elsif (lencount = 0) then
-							internal <= tx_length(lencount);
-							lencount := mlength;
-						else
-							internal <= tx_length(lencount);
-						end if;
-						lencount := lencount - 1;
-					else -- once the length is sent, start sending the message
-						count := count - 1;
-						if (count = 0) then
-							internal <= parallel(count);
-							parallel <= message;
-							count := BITS;
-						else
-							internal <= parallel(count);
-						end if;
-
+				if (length_sent_w = '0') then
+					if (lencount = 2) then
+						internal <= tx_length(lencount);
+						length_sent_w <= '1';
+					elsif (lencount = 1) then
+						parallel <= message; -- load the message so the system is ready to send the message straight away
+						internal <= tx_length(lencount);
+						count := BITS;
+					elsif (lencount = 0) then
+						internal <= tx_length(lencount);
+						lencount := mlength;
+					else
+						internal <= tx_length(lencount);
+					end if;
+					lencount := lencount - 1;
+				else -- once the length is sent, start sending the message
+					count := count - 1;
+					if (count = 0) then
+						internal <= parallel(count);
+						parallel <= message;
+						count := BITS;
+					else
+						internal <= parallel(count);
 					end if;
 				end if;
+
 			end if;
 		else
 			lencount := mlength-1;
@@ -75,4 +72,6 @@ begin
 		end if;
 	end process;
 
+	dout <= (internal xor clk) AND NOT reset;
+	length_sent <= length_sent_w;
 end architecture arch;
