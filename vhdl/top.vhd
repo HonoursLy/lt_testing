@@ -134,6 +134,7 @@ architecture rtl of top is
 
 
 begin
+tx_length <= "00001111111";
 
 ECin : tx_tb
 	port map (

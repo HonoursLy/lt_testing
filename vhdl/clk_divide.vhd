@@ -18,16 +18,16 @@ END clk_divider;
 ARCHITECTURE Behav OF clk_divider IS
     SIGNAL temp : STD_LOGIC;
     SIGNAL counter : INTEGER;
-    SIGNAL divider : INTEGER := 2*N;
 
 BEGIN
+    divider 
     frequency_divider : PROCESS (reset, clk_in)
     BEGIN
         IF (reset = '0') THEN
             temp <= '0';
             counter <= 0;
         ELSIF rising_edge(clk_in) THEN
-            IF (counter = Freq_in/divider) THEN
+            IF (counter = Freq_in/N*2) THEN
                 temp <= NOT(temp);
                 counter <= 0;
             ELSE
