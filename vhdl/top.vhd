@@ -106,14 +106,6 @@ architecture rtl of top is
         );
     end component SB_HFOSC;
 
-
-    component SB_GB is
-        port (
-            USER_SIGNAL_TO_GLOBAL_BUFFER : in  std_logic;
-            GLOBAL_BUFFER_OUTPUT         : out std_logic
-        );
-    end component SB_GB;
-
     signal tx_ready, tram_rd_en       : std_logic                     := '0';
     signal tram_in, tram_out          : std_logic_vector(11 downto 0);
     signal tx_clk                     : std_logic;
@@ -135,7 +127,7 @@ architecture rtl of top is
     signal enc_clk_glb                : std_logic;
 
 begin
-    tx_length <= "00000000111";
+    tx_length <= "00000111111";
 
     ECin: component tx_tb
     generic map (
