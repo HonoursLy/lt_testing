@@ -1,37 +1,37 @@
-LIBRARY IEEE;
-USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.all;
+library IEEE;
+use IEEE.STD_LOGIC_1164.all;
+use IEEE.numeric_std.all;
 
-ENTITY clk_divider IS
-    GENERIC (
-        Freq_in : INTEGER := 48000000;
-        N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
-    ); 
-    PORT (
-        clk_in : IN STD_LOGIC;
-        reset : IN STD_LOGIC;
-        clk_out : OUT STD_LOGIC
+entity clk_divider is
+    generic (
+        Freq_in :     INTEGER := 48000000;
+        N       :     INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
     );
-END clk_divider;
+    port (
+        clk_in  : in  STD_LOGIC;
+        reset   : in  STD_LOGIC;
+        clk_out : out STD_LOGIC
+    );
+end entity clk_divider;
 
-ARCHITECTURE Behave OF clk_divider IS
-    SIGNAL temp : STD_LOGIC;
-    SIGNAL counter : INTEGER;
+architecture Behave of clk_divider is
+    signal temp    : STD_LOGIC;
+    signal counter : INTEGER;
 
-BEGIN 
-    frequency_divider : PROCESS (reset, clk_in)
-    BEGIN
-        IF (reset = '0') THEN
-            temp <= '0';
-            counter <= 0;
-        ELSIF rising_edge(clk_in) THEN
-            IF (counter = N) THEN
-                temp <= NOT(temp);
+begin
+    frequency_divider: process (reset, clk_in) is
+    begin
+        if (reset = '0') then
+            temp        <= '0';
+            counter     <= 0;
+        elsif rising_edge(clk_in) then
+            if (counter = N) then
+                temp    <= not (temp);
                 counter <= 0;
-            ELSE
+            else
                 counter <= counter + 1;
-            END IF;
-        END IF;
-    END PROCESS;
-    clk_out <= temp;
-END Behave;
+            end if;
+        end if;
+    end process frequency_divider;
+    clk_out             <= temp;
+end architecture Behave;

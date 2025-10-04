@@ -206,21 +206,13 @@ begin
     -- HFOSC -> raw clock
     u_osc: component SB_HFOSC
     generic map (
-        CLKHF_DIV                    => "0b00"
+        CLKHF_DIV                    => "0b10"
     )
     port map (
         CLKHFEN                      => '1',
         CLKHFPU                      => '1',
-        CLKHF                        => enc_clk_raw
+        CLKHF                        => enc_clk_glb
     );
-
-    -- >>> NEW: global buffer for 48 MHz domain
-    u_clk48_gb: component SB_GB
-    port map (
-        USER_SIGNAL_TO_GLOBAL_BUFFER => enc_clk_raw,
-        GLOBAL_BUFFER_OUTPUT         => enc_clk_glb
-    );
-    -- <<<
 
     -- Outputs
     clk_48    <= enc_clk_glb;                        -- expose the global’d clock

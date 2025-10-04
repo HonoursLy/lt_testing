@@ -6,47 +6,47 @@ use IEEE.std_logic_unsigned.all;
 
 
 entity tx_tb is
-	generic(
-		BITS : INTEGER := 10; -- Number of bits being encoded
-		mlength : INTEGER := 11 -- Number of bits in the length message (not including the sync)
-	);
-	port(
-	wr_clk : in STD_LOGIC;
-	reset : in STD_LOGIC;
-	wr_en : in STD_LOGIC;
-	tx_length : in std_logic_vector (mlength-1 downto 0);
-	wr_ram : out STD_LOGIC_VECTOR (BITS-1 downto 0);
-	wr_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
-	tx_ready : out STD_LOGIC
-	);
+    generic (
+        BITS      :     INTEGER := 10; -- Number of bits being encoded
+        mlength   :     INTEGER := 11 -- Number of bits in the length message (not including the sync)
+    );
+    port (
+        wr_clk    : in  STD_LOGIC;
+        reset     : in  STD_LOGIC;
+        wr_en     : in  STD_LOGIC;
+        tx_length : in  std_logic_vector(mlength - 1 downto 0);
+        wr_ram    : out STD_LOGIC_VECTOR(BITS - 1 downto 0);
+        wr_addr   : out STD_LOGIC_VECTOR(mlength - 1 downto 0);
+        tx_ready  : out STD_LOGIC
+    );
 end entity tx_tb;
 
 architecture arch of tx_tb is
-	-- insert local declarations here
-	SIGNAL w_count : STD_LOGIC_VECTOR (mlength-1 DOWNTO 0) := (others=>'0');
+    -- insert local declarations here
+    signal w_count : STD_LOGIC_VECTOR(mlength - 1 downto 0) := (others => '0');
 begin
 
-PROCESS (wr_clk, reset)
-	BEGIN
-		IF (reset = '0') THEN
-			w_count <= (OTHERS => '0');
-		ELSIF falling_edge(wr_clk) THEN
-			IF wr_en = '1' THEN
-				IF (w_count >= tx_length) THEN
-				elsif (w_count(1) = '1') then
-					tx_ready <= '1';
-					w_count <= w_count + 1;
-				ELSE
-					w_count <= w_count + 1;
-				END IF;
-			else 
-				w_count <= (OTHERS => '0');
-				tx_ready <= '0';
-			END IF;
-		END IF;
-	END PROCESS;
+    process (wr_clk, reset) is
+    begin
+        if (reset = '0') then
+            w_count          <= (others => '0');
+        elsif falling_edge(wr_clk) then
+            if wr_en = '1' then
+                if (w_count >= tx_length) then
+                elsif (w_count(1) = '1') then
+                    tx_ready <= '1';
+                    w_count  <= w_count + 1;
+                else
+                    w_count  <= w_count + 1;
+                end if;
+            else
+                w_count      <= (others => '0');
+                tx_ready     <= '0';
+            end if;
+        end if;
+    end process;
 
-wr_ram <= '1' & w_count;
-wr_addr <= w_count;
+    wr_ram                   <= '1' & w_count;
+    wr_addr                  <= w_count;
 
 end architecture arch;
