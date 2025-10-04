@@ -1,5 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+USE ieee.numeric_std.ALL;
+USE IEEE.std_logic_signed.ALL;
 
 
 entity manchester_encoder is
@@ -12,9 +14,10 @@ entity manchester_encoder is
 		message : in STD_LOGIC_VECTOR(BITS-1 downto 0);
 		tx_length : in std_logic_vector (mlength-1 downto 0);
 		dout : out STD_LOGIC;
-		length_sent : out STD_LOGIC;
+		rd_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
+		message_sent : out STD_LOGIC;
 		reset : in STD_LOGIC;
-		ena_t : in STD_LOGIC -- enc_en from TX_RAM
+		ena_t : in STD_LOGIC
 	);
 end entity manchester_encoder;
 
@@ -22,9 +25,10 @@ architecture arch of manchester_encoder is
 	signal internal : STD_LOGIC := '0';
 	signal parallel : STD_LOGIC_VECTOR(BITS-1 downto 0) := (others => '0');
 	signal length_sent_w : STD_LOGIC;
+	signal r_count : STD_LOGIC_VECTOR (mlength-1 downto 0) := (others => '0');
 begin
 	process (clk, internal) is
-		variable count : INTEGER range 0 to BITS;
+		variable count : INTEGER range -1 to BITS;
 		variable lencount : INTEGER range 0 to mlength;
 	begin
 		if (clk'event and clk= '1') then
@@ -37,27 +41,31 @@ begin
 
 			elsif (ena_t = '1') then
 				if (length_sent_w = '0') then
-					if (lencount = 2) then
+					if (lencount = 1) then
 						internal <= tx_length(lencount);
-						length_sent_w <= '1';
-					elsif (lencount = 1) then
+						r_count <= (others => '0');
+					elsif (lencount = 0) then
 						parallel <= message; -- load the message so the system is ready to send the message straight away
 						internal <= tx_length(lencount);
 						count := BITS;
-					elsif (lencount = 0) then
-						internal <= tx_length(lencount);
-						lencount := mlength;
+						lencount := mlength;	
+						length_sent_w <= '1';	
 					else
 						internal <= tx_length(lencount);
 					end if;
 					lencount := lencount - 1;
 				else -- once the length is sent, start sending the message
-					count := count - 1;
-					if (count = 0) then
-						internal <= parallel(count);
-						parallel <= message;
-						count := BITS;
+					count := count -1;
+					if (r_count > tx_length and count =-1) then
+						message_sent <= '1';
 					else
+						if (count = -1) then
+							count := BITS-1;
+						elsif (count = 4) then
+							r_count <= r_count + 1;
+						elsif (count = 0) then
+							parallel <= message;
+						end if;
 						internal <= parallel(count);
 					end if;
 				end if;
@@ -66,10 +74,10 @@ begin
 				count := BITS;
 				length_sent_w <= '0';
 				internal <= '0';
+				message_sent <='0';
 			end if;
 		end if;
 	end process;
-
-	dout <= (internal xor clk) AND NOT reset;
-	length_sent <= length_sent_w;
+	rd_addr <= r_count;
+	dout <= (internal xor clk) AND reset AND ena_t;
 end architecture arch;

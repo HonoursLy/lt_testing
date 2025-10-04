@@ -1,0 +1,86 @@
+C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/top.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\top.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity top
+-- Compiling architecture rtl of top
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/top_tb.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\top_tb.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity top_tb
+-- Compiling architecture arch of top_tb
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/LT_controller.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\LT_controller.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity LT_controller
+-- Compiling architecture rtl of LT_controller
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/TX_RAM.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\TX_RAM.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_SIGNED
+-- Compiling entity TX_RAM
+-- Compiling architecture arch of TX_RAM
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/ram.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\ram.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity ram
+-- Compiling architecture rtl of ram
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/manchester_encoder.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\manchester_encoder.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_SIGNED
+-- Compiling entity manchester_encoder
+-- Compiling architecture arch of manchester_encoder
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/tx_tb.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none {C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\tx_tb.vhd}
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package std_logic_arith
+-- Loading package STD_LOGIC_UNSIGNED
+-- Compiling entity tx_tb
+-- Compiling architecture arch of tx_tb
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling entity PLL_clk
+-- Compiling architecture rtl of PLL_clk
+
+} {} {}} C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd {1 {vcom -work work -2002 -explicit -vopt -stats=none C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd
+Questa Lattice OEM Edition-64 vcom 2024.2 Compiler 2024.05 May 20 2024
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity clk_divider
+-- Compiling architecture Behave of clk_divider
+
+} {} {}}

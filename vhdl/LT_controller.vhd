@@ -16,9 +16,7 @@ ENTITY LT_controller IS
 		-- tx_error : OUT STD_LOGIC;
 		-- host : IN STD_LOGIC;
         ena_t : out std_logic;
-        length_sent : in std_logic;
-        tram_rd_en : out STD_LOGIC;
-        enc_en : in std_logic
+        message_sent : in std_logic
         -- rx_done : in std_logic;
         -- aligned : in std_logic
 
@@ -29,11 +27,7 @@ ARCHITECTURE rtl OF LT_controller IS
 
     TYPE fsm_states IS (RT, ID, TX);--, RX, RE, TE, HF, HA, DA); -- reset, idle, transmitting, receiving, receive error, transmit error, hard fault, host align, device align
     SIGNAL ps, ns : fsm_states := ID;
-    SIGNAL TXPS : INTEGER := 0;
-    SIGNAL NTXPS : INTEGER := 0;
-
     SIGNAL ena_t_s : STD_LOGIC := '0';
-    SIGNAL tram_rd_en_s : STD_LOGIC := '0';
 	-- SIGNAL RE_count : INTEGER := 0;
 	-- SIGNAL TE_count : INTEGER := 0;
 	-- count number of error signals
@@ -41,83 +35,49 @@ ARCHITECTURE rtl OF LT_controller IS
 
 BEGIN
     ena_t <= ena_t_s;
-    tram_rd_en <= tram_rd_en_s;
 
     sync_proc : PROCESS (fsm_clk, rst)
     BEGIN
         IF rst = '0' THEN
             ps <= RT;
-            TXPS <= 0;
             -- RE_count <= 0;
             -- TE_count <= 0;
         ELSIF rising_edge(fsm_clk) THEN
             ps <= ns;
-            TXPS <= NTXPS;
         END IF;
     END PROCESS sync_proc;
 
-    comb_proc : PROCESS (ps, TXPS, tx_ready, length_sent, enc_en)
+    comb_proc : PROCESS (ps, tx_ready, message_sent)
     BEGIN
-        ena_t_s <= '0';
-        tram_rd_en_s <= '0';
+	ena_t_s <= '0';
         CASE ps IS
 
             WHEN RT =>
 				-- Reset all light variables
 				-- Go to idle state
-				ns <= ID;
-                NTXPS <= 0;
+		ns <= ID;
                 
             WHEN ID =>
 				-- idle timer if in run state? usb should be running frequently enough that the system should not be in idle long? => tx_error/ hard fault
                 IF (tx_ready = '1') THEN
                     ns <= TX;
-                    NTXPS <= 0;
+		    ena_t_s <= '1';
 					-- transition variable changes
 				-- elsif (rx_received = '1') then
 				-- 	ns <= RX;
 				-- 	-- transition variable changes
                 ELSE
                     ns <= ID;
-                    NTXPS <= 0;
                 END IF;
             WHEN TX =>
-                case TXPS is
-                    WHEN 0 =>
-                        ena_t_s <= '1';
-                        NTXPS <= 1;
-                        tram_rd_en_s <= '0';
-                        ns <= TX;
-                    WHEN 1 =>
-                        if (length_sent = '1') then
-                            tram_rd_en_s <= '1';
-                            NTXPS <= 2;
-                            ena_t_s <= '1';
-                            ns <= TX;
-                        else
-                            ns <= TX;
-                            tram_rd_en_s <= '0';
-                            NTXPS <= 1;
-                            ena_t_s <= '1';
-                        end if;
-                    WHEN 2 =>
-                        if (enc_en = '0') then
-                            ena_t_s <= '0';
-                            tram_rd_en_s <= '0';
-                            ns <= ID;
-                            NTXPS <= 0;
-                        else
-                            ns <= TX;
-                            ena_t_s <= '1';
-                            tram_rd_en_s <= '1';
-                            NTXPS <= 2;
-                        end if;
-                    WHEN others =>
-                            NTXPS <= 0;
-                            ena_t_s <= '0';
-                            tram_rd_en_s <= '0';
-                            ns <= ID;
-                end case;
+		IF (message_sent = '1') then
+			ns <= ID;
+			ena_t_s <= '0';
+		else
+			ns <= TX;
+			ena_t_s <= '1';
+		END IF;
+
 
 			-- WHEN RX =>
 			-- 	if (rx_error = '1') then
@@ -183,7 +143,6 @@ BEGIN
 
             WHEN OTHERS =>
                 ns <= RT;
-                NTXPS <= 0;
 
 
         END CASE;

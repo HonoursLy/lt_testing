@@ -1,0 +1,494 @@
+m255
+K4
+z2
+Z0 !s12c _opt
+Z1 !s99 nomlopt
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+R0
+R1
+!s11e vcom 2024.2 2024.05, May 20 2024
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/elepa/Documents/fpga-projects/RAM
+T_opt
+!s110 1759591316
+VfZ=@8RRaozbdgFS?hGz?=1
+04 6 4 work top_tb arch 1
+=16-2016b9617114-68e13b94-115-41e8
+R1
+!s12f OEM25U7 
+!s12b OEM100
+!s124 OEM100
+!s135 nogc
+o-quiet -auto_acc_if_foreign -work work +acc
+tCvgOpt 0
+n@_opt
+OL;O;2024.2;79
+Eclk_divider
+Z2 w1759546125
+Z3 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+Z4 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z5 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 411
+Z6 dC:/Users/elepa/Documents/fpga-projects/lt_testing
+Z7 8C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd
+Z8 FC:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd
+l0
+L5 1
+VG^YJV8bUkDhY_RE4CX>MK3
+!s100 E1giVZaDi?cKhE^a>clC]1
+Z9 OL;C;2024.2;79
+32
+Z10 !s110 1759591309
+!i10b 1
+Z11 !s108 1759591309.000000
+Z12 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd|
+Z13 !s107 C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/clk_divide.vhd|
+!i113 0
+Z14 o-work work -2002 -explicit
+Z15 tExplicit 1 CvgOpt 0
+Abehave
+R3
+R4
+R5
+DEx4 work 11 clk_divider 0 22 G^YJV8bUkDhY_RE4CX>MK3
+!i122 411
+l21
+L17 21
+V[9j9oa`VPDgUc;K;N9EZM3
+!s100 [??ikM@2Wz6bY;3D^>8<;1
+R9
+32
+R10
+!i10b 1
+R11
+R12
+R13
+!i113 0
+R14
+R15
+Elt_controller
+Z16 w1759585656
+R3
+R4
+R5
+!i122 412
+R6
+Z17 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\LT_controller.vhd
+Z18 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\LT_controller.vhd
+l0
+L5 1
+V[LVeJ4[@di:c7:zeHK3iz2
+!s100 `LTGYUSz7?@W;0hJJBGoz1
+R9
+32
+R10
+!i10b 1
+R11
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\LT_controller.vhd|
+Z20 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\LT_controller.vhd|
+!i113 0
+R14
+R15
+Artl
+R3
+R4
+R5
+DEx4 work 13 lt_controller 0 22 [LVeJ4[@di:c7:zeHK3iz2
+!i122 412
+l36
+L26 126
+V;FImWFDSmlG=BTLI1oQBd0
+!s100 9zOYMk8@k0IecnfPKa7_41
+R9
+32
+R10
+!i10b 1
+R11
+R19
+R20
+!i113 0
+R14
+R15
+Emanchester_encoder
+Z21 w1759591305
+Z22 DPx4 ieee 15 std_logic_arith 0 22 [G314=:2zXJ`VORJe1J@Z1
+Z23 DPx4 ieee 16 std_logic_signed 0 22 C<aanc0R`<LWPSe[JYRP^3
+R3
+R4
+R5
+!i122 413
+R6
+Z24 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\manchester_encoder.vhd
+Z25 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\manchester_encoder.vhd
+l0
+L7 1
+VKEFFMIVobC=7ZNA1k>niC2
+!s100 nBhnXc^IczAV?:aAX=ThW3
+R9
+32
+Z26 !s110 1759591310
+!i10b 1
+R11
+Z27 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\manchester_encoder.vhd|
+Z28 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\manchester_encoder.vhd|
+!i113 0
+R14
+R15
+Aarch
+R22
+R23
+R3
+R4
+R5
+DEx4 work 18 manchester_encoder 0 22 KEFFMIVobC=7ZNA1k>niC2
+!i122 413
+l29
+L24 60
+V<Jb>3AgS<8D8Pn?BRZ?@c1
+!s100 nV?2FNR30fK@V5fIzizV@3
+R9
+32
+R26
+!i10b 1
+R11
+R27
+R28
+!i113 0
+R14
+R15
+Epll_clk
+Z29 w1759193995
+R4
+R5
+!i122 414
+R6
+Z30 8C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd
+Z31 FC:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd
+l0
+L4 1
+VjL69@]caK_<J_:=;h2zG]1
+!s100 ^RD95BI6ha][=ckn7JIXl2
+R9
+32
+R26
+!i10b 1
+Z32 !s108 1759591310.000000
+Z33 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd|
+Z34 !s107 C:/Users/elepa/Documents/fpga-projects/lt_testing/vhdl/pll_clk.vhd|
+!i113 0
+R14
+R15
+Artl
+R4
+R5
+DEx4 work 7 pll_clk 0 22 jL69@]caK_<J_:=;h2zG]1
+!i122 414
+l39
+L13 41
+V?NFLH1BCBVcG5_;CORa]60
+!s100 FG_gCY^RKnFhn_5JK2Mi32
+R9
+32
+R26
+!i10b 1
+R32
+R33
+R34
+!i113 0
+R14
+R15
+Eram
+R29
+R22
+Z35 DPx4 ieee 18 std_logic_unsigned 0 22 ;eZjO2D4ZDz<]0>8AL<ne1
+R4
+R5
+!i122 415
+R6
+Z36 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\ram.vhd
+Z37 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\ram.vhd
+l0
+L5 1
+VmDWRPEDQ[f[DDSTZ[06SZ3
+!s100 ;l6W7F[:fIFSkYiL^Y71>0
+R9
+32
+R26
+!i10b 1
+R32
+Z38 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\ram.vhd|
+Z39 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\ram.vhd|
+!i113 0
+R14
+R15
+Artl
+R22
+R35
+R4
+R5
+DEx4 work 3 ram 0 22 mDWRPEDQ[f[DDSTZ[06SZ3
+!i122 415
+l26
+L21 25
+V];]9Qb]<N;B[BY]:8WiCZ2
+!s100 Znz]]C6P8imfHSdVM8@6c0
+R9
+32
+R26
+!i10b 1
+R32
+R38
+R39
+!i113 0
+R14
+R15
+Etop
+Z40 w1759591127
+R4
+R5
+!i122 416
+R6
+Z41 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\top.vhd
+Z42 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\top.vhd
+l0
+L4 1
+VL4D?1cN6oCdoE7hE60nQP2
+!s100 <1]SSXX>J]gWUZPS@NR;B2
+R9
+32
+R26
+!i10b 1
+R32
+Z43 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\top.vhd|
+Z44 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\top.vhd|
+!i113 0
+R14
+R15
+Artl
+R4
+R5
+DEx4 work 3 top 0 22 L4D?1cN6oCdoE7hE60nQP2
+!i122 416
+l118
+L16 193
+Vl?;IZn6OPIVJW=<hJl7n^0
+!s100 Om_O@@?bl8z37[5bG3Xz;1
+R9
+32
+R26
+!i10b 1
+R32
+R43
+R44
+!i113 0
+R14
+R15
+Etop_tb
+Z45 w1759588050
+R4
+R5
+!i122 419
+R6
+Z46 8C:\Users\elepa\Documents\fpga-projects\lt_testing\top_tb.vhd
+Z47 FC:\Users\elepa\Documents\fpga-projects\lt_testing\top_tb.vhd
+l0
+L4 1
+V1j8Ko:^@gV7PaT]@m<c6V0
+!s100 GYFPFU<[jl0O=e`76jTE93
+R9
+32
+Z48 !s110 1759591311
+!i10b 1
+Z49 !s108 1759591311.000000
+Z50 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\top_tb.vhd|
+Z51 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\top_tb.vhd|
+!i113 0
+R14
+R15
+Aarch
+R4
+R5
+DEx4 work 6 top_tb 0 22 1j8Ko:^@gV7PaT]@m<c6V0
+!i122 419
+l29
+L8 38
+Vg=jzkRSIhAaTT>U9=Eb:71
+!s100 WXoD;;:^<I][IXJ<T[^Bc1
+R9
+32
+R48
+!i10b 1
+R49
+R50
+R51
+!i113 0
+R14
+R15
+Etx_ram
+Z52 w1759553147
+R22
+R23
+R3
+R4
+R5
+!i122 417
+R6
+Z53 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\TX_RAM.vhd
+Z54 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\TX_RAM.vhd
+l0
+L6 1
+VR<;ceEd7MI^iV9Pc9EYIc2
+!s100 DT2hfZPg2llkYO6jmO8V12
+R9
+32
+R26
+!i10b 1
+R32
+Z55 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\TX_RAM.vhd|
+Z56 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\TX_RAM.vhd|
+!i113 0
+R14
+R15
+Aarch
+R22
+R23
+R3
+R4
+R5
+DEx4 work 6 tx_ram 0 22 R<;ceEd7MI^iV9Pc9EYIc2
+!i122 417
+l20
+L18 25
+VF2Rc9jY?_7K=Ec`EmTPW<1
+!s100 `EWV[]YnH@m?E6^TNN6eN0
+R9
+32
+R26
+!i10b 1
+R32
+R55
+R56
+!i113 0
+R14
+R15
+Etx_tb
+Z57 w1759586650
+R22
+R35
+R3
+R4
+R5
+!i122 418
+R6
+Z58 8C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\tx_tb.vhd
+Z59 FC:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\tx_tb.vhd
+l0
+L8 1
+V_A]MTZK7X:kHd;`>E0d9l2
+!s100 EIDiCD1=^dKmRoGzk3ZVS2
+R9
+32
+R48
+!i10b 1
+R32
+Z60 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|-stats=none|C:\Users\elepa\Documents\fpga-projects\lt_testing\vhdl\tx_tb.vhd|
+Z61 !s107 C:\\Users\\elepa\\Documents\\fpga-projects\\lt_testing\\vhdl\\tx_tb.vhd|
+!i113 0
+R14
+R15
+Aarch
+R22
+R35
+R3
+R4
+R5
+DEx4 work 5 tx_tb 0 22 _A]MTZK7X:kHd;`>E0d9l2
+!i122 418
+l27
+L24 29
+VklAd7ca`oZ<ef;ESn:0CZ2
+!s100 Y7dc1^hKdg2GflWLUT>?<1
+R9
+32
+R48
+!i10b 1
+R32
+R60
+R61
+!i113 0
+R14
+R15

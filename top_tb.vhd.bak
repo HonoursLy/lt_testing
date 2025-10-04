@@ -1,0 +1,45 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity top_tb is
+
+end top_tb;
+
+architecture arch of top_tb is
+component top is
+	port (
+		tram_wr_en : in std_logic;
+		reset : in std_logic;
+		enc_clk : in std_logic;
+		clk_48 : out std_logic;
+		clk_tx : out std_logic;
+		dout : out std_logic;
+		enc_ena : out std_logic
+	);
+end component;
+
+signal tram_wr_en : std_logic := '0';
+signal reset : std_logic :='0';
+signal clk_48 : std_logic;
+signal clk_tx : std_logic;
+signal dout : std_logic;
+signal enc_ena : std_logic;
+signal enc_clk : std_logic := '0';
+
+begin
+toptb : top
+port map(
+tram_wr_en => tram_wr_en,
+reset => reset,
+enc_clk => enc_clk,
+clk_48 => clk_48,
+clk_tx => clk_tx,
+dout => dout,
+enc_ena => enc_ena
+);
+
+tram_wr_en <= '1' after 30 ns, '0' after 110 ns;
+reset <= '1' after 20 ns;
+enc_clk <= not enc_clk after 5 ns;
+
+end architecture;

@@ -13,7 +13,6 @@ ghdl --std=08 -fsynopsys -frelaxed-rules \
 	vhdl/LT_controller.vhd \
 	vhdl/manchester_encoder.vhd\
 	vhdl/ram.vhd \
-	vhdl/TX_RAM.vhd \
 	vhdl/tx_tb.vhd \
 	-e top;
 

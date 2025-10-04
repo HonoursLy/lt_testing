@@ -13,17 +13,21 @@ entity top is
 end top;
 
 architecture rtl of top is
-	component tx_tb is
-		port (
-			wr_clk : in STD_LOGIC;
-			reset : in STD_LOGIC;
-			wr_en : in STD_LOGIC;
-			tx_length : in std_logic_vector (10 downto 0);
-			wr_ram : out STD_LOGIC_VECTOR (9 downto 0);
-			wr_addr : out STD_LOGIC_VECTOR (10 downto 0);
-			tx_ready : out STD_LOGIC
-		);
-	end component;
+component tx_tb is
+	generic(
+		BITS : INTEGER := 10; -- Number of bits being encoded
+		mlength : INTEGER := 11 -- Number of bits in the length message (not including the sync)
+	);
+	port(
+	wr_clk : in STD_LOGIC;
+	reset : in STD_LOGIC;
+	wr_en : in STD_LOGIC;
+	tx_length : in std_logic_vector (mlength-1 downto 0);
+	wr_ram : out STD_LOGIC_VECTOR (BITS-1 downto 0);
+	wr_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
+	tx_ready : out STD_LOGIC
+	);
+end component;
 
 	component ram is
 		generic (
@@ -41,17 +45,7 @@ architecture rtl of top is
 		);
 	end component;
 
-	component TX_RAM IS
-	PORT (
-		rd_clk : IN STD_LOGIC;
-		reset : IN STD_LOGIC;
-		rd_en : IN STD_LOGIC;
-		tx_length : IN STD_LOGIC_VECTOR (10 DOWNTO 0);
-		rd_addr : OUT STD_LOGIC_VECTOR (10 DOWNTO 0);
-		enc_en : OUT STD_LOGIC -- signal to stop the encoder from writing to dout
-		);
-	END component;
-	component manchester_encoder is
+component manchester_encoder is
 	generic(
 		BITS : INTEGER := 10; -- Number of bits being encoded
 		mlength : INTEGER := 11 -- Number of bits in the length message (not including the sync)
@@ -61,22 +55,12 @@ architecture rtl of top is
 		message : in STD_LOGIC_VECTOR(BITS-1 downto 0);
 		tx_length : in std_logic_vector (mlength-1 downto 0);
 		dout : out STD_LOGIC;
-		length_sent : out STD_LOGIC;
+		rd_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
+		message_sent : out STD_LOGIC;
 		reset : in STD_LOGIC;
-		ena_t : in STD_LOGIC -- enc_en from TX_RAM
+		ena_t : in STD_LOGIC
 	);
-	end component;
-
-	COMPONENT SB_HFOSC IS
-		GENERIC (
-			CLKHF_DIV : STRING := "0b00"
-		);
-		PORT (
-			CLKHFEN : IN STD_LOGIC;
-			CLKHFPU : IN STD_LOGIC;
-			CLKHF : OUT STD_LOGIC
-		);
-	END COMPONENT SB_HFOSC;
+end component;
 
 	COMPONENT clk_divider IS
 		GENERIC (
@@ -93,34 +77,44 @@ architecture rtl of top is
 	
 	component LT_controller IS
     PORT (
-        fsm_clk : IN STD_LOGIC;
+        fsm_clk : IN STD_LOGIC; 
         rst : IN STD_LOGIC;
 		-- Indicators from other blocks to trigger states
         tx_ready : IN STD_LOGIC; -- indication from EC to start reading TX_RAM and transmit
 		-- rx_received : IN STD_LOGIC; -- indication from the RX line that a light message is incoming
 		-- host_align : IN STD_LOGIC;
 		-- device_align : IN STD_LOGIC;
-		-- -- Add error signals that suggest to go to idle state?
+		-- Add error signals that suggest to go to idle state?
 		-- rx_error : OUT STD_LOGIC;
 		-- tx_error : OUT STD_LOGIC;
 		-- host : IN STD_LOGIC;
         ena_t : out std_logic;
-        length_sent : in std_logic;
-        tram_rd_en : out STD_LOGIC;
-        enc_en : in std_logic
-		-- rx_done : in std_logic;
-		-- aligned : in std_logic
+        message_sent : in std_logic
+        -- rx_done : in std_logic;
+        -- aligned : in std_logic
+
     );
-	END component;
+END component;
+
+component SB_HFOSC is
+		generic (
+			CLKHF_DIV : STRING := "0b00"
+		);
+		port (
+			CLKHFEN : in STD_LOGIC;
+			CLKHFPU : in STD_LOGIC;
+			CLKHF : out STD_LOGIC
+		);
+	end component SB_HFOSC;
 
 	signal tx_ready, tram_rd_en : std_logic := '0';
-	signal tram_in, tram_out : std_logic_vector (9 downto 0);
+	signal tram_in, tram_out : std_logic_vector (11 downto 0);
 	signal tx_clk : std_logic;
-	signal tram_raddr_i,tram_waddr_i : std_logic_vector (10 downto 0);
+ 	signal tram_raddr_i,tram_waddr_i : std_logic_vector (10 downto 0);
 	signal tx_length : std_logic_vector (10 downto 0) := "00001111111";
-	signal enc_clk : std_logic;
-	signal length_sent : std_logic;
 	signal ena_t : std_logic;
+	signal message_sent : std_logic := '0';
+	signal enc_clk : std_logic;
 	-- signal rx_received : std_logic := '0'; -- indication from the RX line that a light message is incoming
 	-- signal host_align : std_logic := '0';
 	-- signal device_align : std_logic := '0';
@@ -128,15 +122,18 @@ architecture rtl of top is
 	-- signal rx_error : std_logic := '0';
 	-- signal tx_error : std_logic := '0';
 	-- signal host : std_logic := '0';
-	signal enc_en :std_logic := '0';
 	-- signal rx_done : std_logic := '0';
 	-- signal aligned : std_logic := '0';
 
 
 begin
-tx_length <= "00001111111";
+tx_length <= "00000000111";
 
 ECin : tx_tb
+	generic map(
+	BITS => 12,
+	mlength => 11
+	)
 	port map (
 	wr_clk => tx_clk,
 	reset => reset,
@@ -149,33 +146,23 @@ ECin : tx_tb
 
 ram_tx : ram 
     generic map (
-        addr_width => 11, -- 2048 x 10
-        data_width => 10
+        addr_width => 11, -- 2048 x 12
+        data_width => 12
     )
     port map (
         write_en => tram_wr_en,
         waddr  => tram_waddr_i,
         wclk  => tx_clk,
         raddr  => tram_raddr_i,
-        rclk   => tx_clk,
+        rclk   => enc_clk,
         din  => tram_in,
         dout => tram_out
     );
 
-tx_addr : TX_RAM 
-	PORT MAP (
-		rd_clk => tx_clk,
-		reset => reset,
-		rd_en => tram_rd_en,
-		tx_length => tx_length,
-		rd_addr => tram_raddr_i,
-		enc_en => enc_en
-	);
-
 
 man_enc : manchester_encoder
 	generic map(
-		BITS => 10, -- Number of bits being encoded in message 'byte'
+		BITS => 12, -- Number of bits being encoded in message 'byte'
 		mlength => 11 -- Number of bits in the length message (not including the sync)
 	)
 	port map (
@@ -183,25 +170,17 @@ man_enc : manchester_encoder
 		message => tram_out,
 		tx_length => tx_length,
 		dout => dout,
-		length_sent => length_sent,
+		rd_addr => tram_raddr_i,
+		message_sent => message_sent,
 		reset => reset,
 		ena_t => ena_t 
 	);
 
-u_osc : SB_HFOSC
-	GENERIC MAP(
-		CLKHF_DIV => "0b00"
-	)
-	PORT MAP(
-		CLKHFEN => '1',
-		CLKHFPU => '1',
-		CLKHF => enc_clk
-	);
 
 clk_4_tx : clk_divider
     GENERIC map (
         Freq_in => 48000000,
-        N => 10 -- speed divider, equates to the number of bits (BITS)
+        N => 4 -- speed divider, equates to the number of bits (BITS)
     )
     PORT map (
         clk_in => enc_clk,
@@ -223,12 +202,19 @@ lt_fsm : LT_controller
 		-- tx_error => tx_error,
 		-- host => host,
         ena_t => ena_t,
-        length_sent => length_sent,
-        tram_rd_en => tram_rd_en,
-        enc_en => enc_en
+        message_sent => message_sent
 		-- rx_done => rx_done,
 		-- aligned => aligned
     );
+		u_osc: component SB_HFOSC
+	generic map (
+		CLKHF_DIV => "0b00"
+	)
+	port map (
+		CLKHFEN => '1',
+		CLKHFPU => '1',
+		CLKHF => enc_clk
+	);
 
 	clk_48 <= enc_clk;
 	clk_tx <= tx_clk;
