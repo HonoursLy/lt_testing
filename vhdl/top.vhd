@@ -227,7 +227,7 @@ lt_fsm : LT_controller
 	-- );
     
     -- clk_tx <= tx_clk;
-	clk_50 <= enc_clk;
+	clk_50 <= bit_out;
 	enc_ena <= ena_t;
 -- tx_clk => clock A
 -- enc_clk => BITS * clock A
