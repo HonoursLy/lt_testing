@@ -6,7 +6,7 @@ entity top is
 		tram_wr_en : in std_logic;
 		reset : in std_logic;
 		clk_48 : out std_logic;
-		clk_tx : out std_logic;
+		-- clk_tx : out std_logic;
 		dout : out std_logic;
 		enc_ena : out std_logic
 	);
@@ -62,17 +62,17 @@ component manchester_encoder is
 	);
 end component;
 
-	COMPONENT clk_divider IS
-		GENERIC (
-			Freq_in : INTEGER := 48000000;
-			N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
-		); 
-		PORT (
-			clk_in : IN STD_LOGIC;
-			reset : IN STD_LOGIC;
-			clk_out : OUT STD_LOGIC
-		);
-	end component;
+	-- COMPONENT clk_divider IS
+	-- 	GENERIC (
+	-- 		Freq_in : INTEGER := 48000000;
+	-- 		N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
+	-- 	); 
+	-- 	PORT (
+	-- 		clk_in : IN STD_LOGIC;
+	-- 		reset : IN STD_LOGIC;
+	-- 		clk_out : OUT STD_LOGIC
+	-- 	);
+	-- end component;
 
 	
 	component LT_controller IS
@@ -109,7 +109,7 @@ component SB_HFOSC is
 
 	signal tx_ready, tram_rd_en : std_logic := '0';
 	signal tram_in, tram_out : std_logic_vector (11 downto 0);
-	signal tx_clk : std_logic;
+	-- signal tx_clk : std_logic;
  	signal tram_raddr_i,tram_waddr_i : std_logic_vector (10 downto 0);
 	signal tx_length : std_logic_vector (10 downto 0) := "00001111111";
 	signal ena_t : std_logic;
@@ -135,7 +135,7 @@ ECin : tx_tb
 	mlength => 11
 	)
 	port map (
-	wr_clk => tx_clk,
+	wr_clk => enc_clk,
 	reset => reset,
 	wr_en => tram_wr_en,
 	tx_length => tx_length,
@@ -152,7 +152,7 @@ ram_tx : ram
     port map (
         write_en => tram_wr_en,
         waddr  => tram_waddr_i,
-        wclk  => tx_clk,
+        wclk  => enc_clk,
         raddr  => tram_raddr_i,
         rclk   => enc_clk,
         din  => tram_in,
@@ -177,16 +177,16 @@ man_enc : manchester_encoder
 	);
 
 
-clk_4_tx : clk_divider
-    GENERIC map (
-        Freq_in => 48000000,
-        N => 4 -- speed divider, equates to the number of bits (BITS)
-    )
-    PORT map (
-        clk_in => enc_clk,
-        reset => reset,
-        clk_out => tx_clk
-    );
+-- clk_4_tx : clk_divider
+--     GENERIC map (
+--         Freq_in => 48000000,
+--         N => 12 -- speed divider, equates to the number of bits (BITS)
+--     )
+--     PORT map (
+--         clk_in => enc_clk,
+--         reset => reset,
+--         clk_out => tx_clk
+--     );
 
 lt_fsm : LT_controller
     PORT MAP(
@@ -215,9 +215,9 @@ lt_fsm : LT_controller
 		CLKHFPU => '1',
 		CLKHF => enc_clk
 	);
-
+    
+    -- clk_tx <= tx_clk;
 	clk_48 <= enc_clk;
-	clk_tx <= tx_clk;
 	enc_ena <= ena_t;
 -- tx_clk => clock A
 -- enc_clk => BITS * clock A

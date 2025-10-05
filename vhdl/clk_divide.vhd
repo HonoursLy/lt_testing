@@ -25,7 +25,7 @@ BEGIN
             temp <= '0';
             counter <= 0;
         ELSIF rising_edge(clk_in) THEN
-            IF (counter = N) THEN
+            IF (counter = Freq_in/N) THEN
                 temp <= NOT(temp);
                 counter <= 0;
             ELSE

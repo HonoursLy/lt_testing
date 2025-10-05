@@ -27,7 +27,7 @@ architecture arch of manchester_encoder is
 	signal length_sent_w : STD_LOGIC;
 	signal r_count : STD_LOGIC_VECTOR (mlength-1 downto 0) := (others => '0');
 begin
-	process (clk, internal) is
+	process (clk) is
 		variable count : INTEGER range -1 to BITS;
 		variable lencount : INTEGER range 0 to mlength;
 	begin
@@ -79,5 +79,5 @@ begin
 		end if;
 	end process;
 	rd_addr <= r_count;
-	dout <= (internal xor clk) AND reset AND ena_t;
+	dout <= (internal xor clk) AND ena_t;
 end architecture arch;

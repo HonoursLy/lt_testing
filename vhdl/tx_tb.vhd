@@ -23,19 +23,17 @@ end entity tx_tb;
 
 architecture arch of tx_tb is
 	-- insert local declarations here
-	SIGNAL w_count : STD_LOGIC_VECTOR (mlength-1 DOWNTO 0) := (others=>'0');
+	SIGNAL w_count : STD_LOGIC_VECTOR (BITS-1 DOWNTO 0) := (others=>'0');
 begin
 
 PROCESS (wr_clk, reset)
 	BEGIN
 		IF (reset = '0') THEN
 			w_count <= (OTHERS => '0');
-		ELSIF falling_edge(wr_clk) THEN
+		ELSIF rising_edge(wr_clk) THEN
 			IF wr_en = '1' THEN
-				IF (w_count >= tx_length) THEN
-				elsif (w_count(1) = '1') then
+				IF (w_count(10 downto 0) >= tx_length) THEN
 					tx_ready <= '1';
-					w_count <= w_count + 1;
 				ELSE
 					w_count <= w_count + 1;
 				END IF;
@@ -46,7 +44,7 @@ PROCESS (wr_clk, reset)
 		END IF;
 	END PROCESS;
 
-wr_ram <= '1' & w_count;
-wr_addr <= w_count;
+wr_ram <= w_count;
+wr_addr <= w_count(10 downto 0);
 
 end architecture arch;
