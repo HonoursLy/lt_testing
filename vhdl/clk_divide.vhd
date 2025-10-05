@@ -21,7 +21,7 @@ BEGIN
             temp <= '0';
             counter <= 0;
         ELSIF rising_edge(clk_in) THEN
-            IF (counter = 1) THEN
+            IF (counter = 0) THEN
                 temp <= NOT(temp);
                 counter <= 0;
             ELSE
