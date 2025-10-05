@@ -5,11 +5,11 @@ entity top is
 	port (
 		tram_wr_en : in std_logic;
 		reset : in std_logic;
-		clk_48 : out std_logic;
+		clk_50 : out std_logic;
 		-- clk_tx : out std_logic;
 		dout : out std_logic;
 		enc_ena : out std_logic;
-        enc_clk : in std_logic
+        clk_100 : in std_logic
 	);
 end top;
 
@@ -63,17 +63,21 @@ component manchester_encoder is
 	);
 end component;
 
-	-- COMPONENT clk_divider IS
-	-- 	GENERIC (
-	-- 		Freq_in : INTEGER := 48000000;
-	-- 		N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
-	-- 	); 
-	-- 	PORT (
-	-- 		clk_in : IN STD_LOGIC;
-	-- 		reset : IN STD_LOGIC;
-	-- 		clk_out : OUT STD_LOGIC
-	-- 	);
-	-- end component;
+	COMPONENT clk_divider IS
+		PORT (
+			clk_in : IN STD_LOGIC;
+			reset : IN STD_LOGIC;
+			clk_out : OUT STD_LOGIC
+		);
+	end component;
+
+    component bit_switcher is
+        port (
+            clk, reset : in std_logic;
+            v, d       : in std_logic;
+            y          : out std_logic
+        );
+    end component;
 
 	
 	component LT_controller IS
@@ -115,7 +119,8 @@ END component;
 	signal tx_length : std_logic_vector (10 downto 0) := "00001111111";
 	signal ena_t : std_logic;
 	signal message_sent : std_logic := '0';
-	-- signal enc_clk : std_logic;
+    signal bit_out : std_logic;
+	signal enc_clk : std_logic;
 	-- signal rx_received : std_logic := '0'; -- indication from the RX line that a light message is incoming
 	-- signal host_align : std_logic := '0';
 	-- signal device_align : std_logic := '0';
@@ -170,24 +175,28 @@ man_enc : manchester_encoder
 		clk => enc_clk,
 		message => tram_out,
 		tx_length => tx_length,
-		dout => dout,
+		dout => bit_out,
 		rd_addr => tram_raddr_i,
 		message_sent => message_sent,
 		reset => reset,
 		ena_t => ena_t 
 	);
 
+bitsw : bit_switcher
+    port map (
+        clk => clk_100, 
+        reset => reset,
+        v => ena_t,
+        d => bit_out,
+        y => dout
+    );
 
--- clk_4_tx : clk_divider
---     GENERIC map (
---         Freq_in => 48000000,
---         N => 12 -- speed divider, equates to the number of bits (BITS)
---     )
---     PORT map (
---         clk_in => enc_clk,
---         reset => reset,
---         clk_out => tx_clk
---     );
+clk_4_enc : clk_divider
+    PORT map (
+        clk_in => clk_100,
+        reset => reset,
+        clk_out => enc_clk
+    );
 
 lt_fsm : LT_controller
     PORT MAP(
@@ -218,7 +227,7 @@ lt_fsm : LT_controller
 	-- );
     
     -- clk_tx <= tx_clk;
-	clk_48 <= enc_clk;
+	clk_50 <= enc_clk;
 	enc_ena <= ena_t;
 -- tx_clk => clock A
 -- enc_clk => BITS * clock A

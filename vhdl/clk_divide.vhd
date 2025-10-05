@@ -3,10 +3,6 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.numeric_std.all;
 
 ENTITY clk_divider IS
-    GENERIC (
-        Freq_in : INTEGER := 48000000;
-        N : INTEGER := 10 -- speed divider, equates to the number of bits (BITS)
-    ); 
     PORT (
         clk_in : IN STD_LOGIC;
         reset : IN STD_LOGIC;
@@ -25,7 +21,7 @@ BEGIN
             temp <= '0';
             counter <= 0;
         ELSIF rising_edge(clk_in) THEN
-            IF (counter = Freq_in/N) THEN
+            IF (counter = 49999999) THEN
                 temp <= NOT(temp);
                 counter <= 0;
             ELSE

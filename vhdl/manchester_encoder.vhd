@@ -17,7 +17,8 @@ entity manchester_encoder is
 		rd_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
 		message_sent : out STD_LOGIC;
 		reset : in STD_LOGIC;
-		ena_t : in STD_LOGIC
+		ena_t : in STD_LOGIC;
+		d_out : out std_logic
 	);
 end entity manchester_encoder;
 
@@ -79,5 +80,5 @@ begin
 		end if;
 	end process;
 	rd_addr <= r_count;
-	dout <= (internal xor clk) AND ena_t;
+	d_out <= internal;
 end architecture arch;
