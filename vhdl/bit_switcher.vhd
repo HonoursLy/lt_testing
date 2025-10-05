@@ -65,7 +65,7 @@ begin
     end process;
 
     -- Moore output logic
-    y <= '1' when state_reg = s1a or state_reg = s0b else
+    y <= '1' when state_reg = s1b or state_reg = s0a else
         '0';
 
 end moore_arch;

@@ -17,8 +17,7 @@ entity manchester_encoder is
 		rd_addr : out STD_LOGIC_VECTOR (mlength-1 downto 0);
 		message_sent : out STD_LOGIC;
 		reset : in STD_LOGIC;
-		ena_t : in STD_LOGIC;
-		d_out : out std_logic
+		ena_t : in STD_LOGIC
 	);
 end entity manchester_encoder;
 
@@ -59,6 +58,8 @@ begin
 					count := count -1;
 					if (r_count > tx_length and count =-1) then
 						message_sent <= '1';
+						r_count <= (others => '0');
+						parallel <= (others => '0');
 					else
 						if (count = -1) then
 							count := BITS-1;
@@ -80,5 +81,5 @@ begin
 		end if;
 	end process;
 	rd_addr <= r_count;
-	d_out <= internal;
+	dout <= internal;
 end architecture arch;

@@ -6,7 +6,7 @@ entity top is
 		tram_wr_en : in std_logic;
 		reset : in std_logic;
 		clk_50 : out std_logic;
-		-- clk_tx : out std_logic;
+		bitt_out : out std_logic;
 		dout : out std_logic;
 		enc_ena : out std_logic;
         clk_100 : in std_logic
@@ -133,7 +133,7 @@ END component;
 
 
 begin
-tx_length <= "00000000111";
+tx_length <= "00000111111";
 
 ECin : tx_tb
 	generic map(
@@ -227,7 +227,8 @@ lt_fsm : LT_controller
 	-- );
     
     -- clk_tx <= tx_clk;
-	clk_50 <= bit_out;
+	clk_50 <= enc_clk;
+	bitt_out <= bit_out;
 	enc_ena <= ena_t;
 -- tx_clk => clock A
 -- enc_clk => BITS * clock A
