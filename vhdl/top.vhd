@@ -8,7 +8,8 @@ entity top is
 		clk_48 : out std_logic;
 		-- clk_tx : out std_logic;
 		dout : out std_logic;
-		enc_ena : out std_logic
+		enc_ena : out std_logic;
+        enc_clk : in std_logic
 	);
 end top;
 
@@ -96,16 +97,16 @@ end component;
     );
 END component;
 
-component SB_HFOSC is
-		generic (
-			CLKHF_DIV : STRING := "0b00"
-		);
-		port (
-			CLKHFEN : in STD_LOGIC;
-			CLKHFPU : in STD_LOGIC;
-			CLKHF : out STD_LOGIC
-		);
-	end component SB_HFOSC;
+-- component SB_HFOSC is
+-- 		generic (
+-- 			CLKHF_DIV : STRING := "0b00"
+-- 		);
+-- 		port (
+-- 			CLKHFEN : in STD_LOGIC;
+-- 			CLKHFPU : in STD_LOGIC;
+-- 			CLKHF : out STD_LOGIC
+-- 		);
+-- 	end component SB_HFOSC;
 
 	signal tx_ready, tram_rd_en : std_logic := '0';
 	signal tram_in, tram_out : std_logic_vector (11 downto 0);
@@ -114,7 +115,7 @@ component SB_HFOSC is
 	signal tx_length : std_logic_vector (10 downto 0) := "00001111111";
 	signal ena_t : std_logic;
 	signal message_sent : std_logic := '0';
-	signal enc_clk : std_logic;
+	-- signal enc_clk : std_logic;
 	-- signal rx_received : std_logic := '0'; -- indication from the RX line that a light message is incoming
 	-- signal host_align : std_logic := '0';
 	-- signal device_align : std_logic := '0';
@@ -206,15 +207,15 @@ lt_fsm : LT_controller
 		-- rx_done => rx_done,
 		-- aligned => aligned
     );
-		u_osc: component SB_HFOSC
-	generic map (
-		CLKHF_DIV => "0b00"
-	)
-	port map (
-		CLKHFEN => '1',
-		CLKHFPU => '1',
-		CLKHF => enc_clk
-	);
+	-- 	u_osc: component SB_HFOSC
+	-- generic map (
+	-- 	CLKHF_DIV => "0b00"
+	-- )
+	-- port map (
+	-- 	CLKHFEN => '1',
+	-- 	CLKHFPU => '1',
+	-- 	CLKHF => enc_clk
+	-- );
     
     -- clk_tx <= tx_clk;
 	clk_48 <= enc_clk;

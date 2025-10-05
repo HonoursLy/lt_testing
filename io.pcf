@@ -3,3 +3,4 @@ set_io reset 20
 set_io clk_48  28
 set_io dout 11
 set_io enc_ena 12
+set_io enc_clk 13
